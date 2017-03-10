@@ -18,8 +18,6 @@ class BearerTokenAuth(AuthBase):
 
 
 class JLMOAuth2(object):
-    PROFILE_URL = "https://auth.jlm2017.fr/voir_profil"
-
     def authenticate(self, access_token=None):
         if access_token:
             res = requests.get(settings.PROFILE_URL, auth=BearerTokenAuth(access_token))
