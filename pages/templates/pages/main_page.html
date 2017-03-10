@@ -1,0 +1,11 @@
+{% extends "pages/layout.html" %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        Vous êtes actuellement authentifié comme {{ user.email }}. <a href="{% url "accounts:deconnexion" %}">Se déconnecter.</a>
+    {% else %}
+        Vous n'êtes pas authentifié. <a href="{% url "accounts:connexion" %}">Connectez-vous</a>
+    {% endif %}
+
+
+{% endblock %}
