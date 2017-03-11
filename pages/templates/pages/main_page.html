@@ -2,7 +2,70 @@
 
 {% block content %}
     {% if user.is_authenticated %}
-        Vous êtes actuellement authentifié comme {{ user.email }}. <a href="{% url "accounts:deconnexion" %}">Se déconnecter.</a>
+        <p>Vous êtes actuellement authentifié comme {{ user.email }}.
+            <a href="{% url "accounts:deconnexion" %}">Se déconnecter</a>.
+        </p>
+
+        <div id="app"></div>
+
+        <script>
+          App = React.createClass({
+            getInitialState: function () {
+              return {jwt: null, profil: null};
+            },
+            getJWT: function () {
+              const self = this;
+              superagent.get('/api/v1/token').withCredentials()
+                .end(function (err, res) {
+                  if (err) {
+                    return alert(err);
+                  }
+                  self.setState({jwt: res.body});
+                })
+            },
+            getProfile: function() {
+              const self = this;
+              superagent.get('/api/v1/profil')
+                .set('Authorization', 'JWT ' + this.state.jwt.token)
+                .end(function(err, res) {
+                  if(err) {
+                    return alert(err);
+                  }
+                  self.setState({profil: res.body});
+                })
+            },
+            render: function () {
+              return (
+                React.createElement('div', {},
+                  React.createElement(JWTGetter, {onClick: this.getJWT, jwt: this.state.jwt}),
+                  this.state.jwt && React.createElement(ProfileGetter, {onClick: this.getProfile, profil: this.state.profil})
+                )
+              )
+            }
+          });
+
+          function JWTGetter(props) {
+            return (
+              React.createElement('div', {},
+                React.createElement('button', {onClick: props.onClick}, "Obtenir JWT"),
+                React.createElement('textarea', {value: props.jwt ? JSON.stringify(props.jwt) : ''})
+              )
+            );
+          }
+
+          function ProfileGetter(props) {
+            return (
+              React.createElement('div', {},
+                React.createElement('button', {onClick: props.onClick}, "Obtenir Profil"),
+                React.createElement('textarea', {value: props.profil ? JSON.stringify(props.profil) : ''})
+              )
+            );
+
+          }
+
+          ReactDOM.render(React.createElement(App, {}), document.getElementById('app'));
+        </script>
+
     {% else %}
         Vous n'êtes pas authentifié. <a href="{% url "accounts:connexion" %}">Connectez-vous</a>
     {% endif %}

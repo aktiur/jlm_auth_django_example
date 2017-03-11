@@ -16,10 +16,12 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from pages import urls as pages_urls
+from api import urls as api_urls
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^api/v1/', include(api_urls, namespace='api')),
     url('', include('accounts.urls', namespace='accounts')),
     url('', include(pages_urls)),
 ]
