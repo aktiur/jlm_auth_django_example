@@ -123,17 +123,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-REDIRECT_BASE = 'http://localhost:8000'
 
-AUTHORIZATION_URL = 'https://auth.jlm2017.fr/autoriser'
-ACCESS_TOKEN_URL = 'https://auth.jlm2017.fr/token'
-DEFAULT_SCOPE = ['view_profile']
-SCOPE_SEPARATOR = ' '
-PROFILE_URL = 'https://auth.jlm2017.fr/voir_profil'
-CLIENT_ID = "client1"
-CLIENT_SECRET = "secret1"
-
-AUTHENTICATION_BACKENDS = ["accounts.backend.JLMOAuth2"]
+# rest_framework config
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -143,3 +134,36 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
 }
+
+
+# jlm-auth config
+# these settings are specific to the jlm-auth platform and should generally not be changed for your specific application
+
+# the url to which the user should be redirect to initiate the OAuth2 process
+AUTHORIZATION_URL = 'https://auth.jlm2017.fr/autoriser'
+# the url to which your app must POST the authorization code to get the access token
+ACCESS_TOKEN_URL = 'https://auth.jlm2017.fr/token'
+# the default scopes to ask for (may be changed in specific cases after discussions with the jlm2017 team)
+DEFAULT_SCOPE = ['view_profile']
+# the scope separator used by the OAuth2 provider
+SCOPE_SEPARATOR = ' '
+# the API URL from which the profile can be requested
+PROFILE_URL = 'https://auth.jlm2017.fr/voir_profil'
+
+
+# jlm-auth / your application config
+
+# your client ID (given by the jlm2017 team)
+CLIENT_ID = "client1"
+# your client secret (given by the jlm2017 team)
+# This value MUST not be part of the versionned code
+CLIENT_SECRET = "secret1"
+# the base host name to which the OAuth process will allow redirection
+REDIRECT_BASE = 'http://localhost:8000'
+
+# the authentication backends to use to authenticate users
+# by default, only jlm-auth authentication is enabled
+# you may want to add other authentication backends if you need to authenticate
+# users by other means (for example if you want admin users to authenticate using password
+# to access the administration panel)
+AUTHENTICATION_BACKENDS = ["accounts.backend.JLMOAuth2"]
