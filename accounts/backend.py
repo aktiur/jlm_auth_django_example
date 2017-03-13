@@ -5,6 +5,7 @@ import requests
 from requests.auth import AuthBase
 
 from .models import User
+from .actions.profile import extract_profile, update_profile
 
 
 class BearerTokenAuth(AuthBase):
@@ -16,7 +17,6 @@ class BearerTokenAuth(AuthBase):
         return r
 
 
-
 class JLMOAuth2(object):
     def authenticate(self, access_token=None):
         if access_token:
@@ -24,15 +24,23 @@ class JLMOAuth2(object):
 
             if res.status_code // 100 == 2:
                 try:
-                    profile = res.json()
+                    jlm_profile = res.json()
                 except ValueError:
                     # it was not JSON
                     return None
 
-                email = profile.get('email', None)
-                if email:
-                    user, created = User.objects.get_or_create(email=email)
+                pk = jlm_profile.get('id', None)
+                profile = extract_profile(jlm_profile)
+
+                if id:
+                    user, created = User.objects.get_or_create(pk=pk, defaults=profile)
+
+                    if not created:
+                        update_profile(user, profile)
                     return user
+
+            # not authenticated
+            return None
 
     def get_user(self, user_id):
         try:

@@ -130,26 +130,8 @@ ACCESS_TOKEN_URL = 'https://auth.jlm2017.fr/token'
 DEFAULT_SCOPE = ['view_profile']
 SCOPE_SEPARATOR = ' '
 PROFILE_URL = 'https://auth.jlm2017.fr/voir_profil'
-CLIENT_ID = "melenphone"
-CLIENT_SECRET = "tres_secret"
-
-import os
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
-        },
-    },
-}
+CLIENT_ID = "client1"
+CLIENT_SECRET = "secret1"
 
 AUTHENTICATION_BACKENDS = ["accounts.backend.JLMOAuth2"]
 
@@ -158,10 +140,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
-}
-
-JWT_AUTH = {
-    'JWT_ALLOW_REFRESH': True,
 }
