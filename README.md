@@ -1,6 +1,7 @@
 # jlm_auth_django_example
 
 Ce  projet Django démontre comment intégrer l'authentification JLM2017 à votre application.
+Il a été principalement testé avec Python 3, mais devrait fonctioner sous Python 2.7.
 
 L'authentification, via OAuth2, vous permet notamment de récupérer le profil de l'utilisateur tel
 qu'il a été rempli sur le site jlm2017.fr.
