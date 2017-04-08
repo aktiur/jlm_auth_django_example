@@ -4,16 +4,18 @@ from __future__ import unicode_literals
 def extract_profile(jlm_profile):
     location = jlm_profile.get('location', {})
 
-    profile = {
-        'email': jlm_profile['email'],
-        'first_name': jlm_profile.get('first_name', ''),
-        'last_name': jlm_profile.get('last_name', ''),
-        'city': location.get('city', ''),
-        'country_code': location.get('country_code')
-    }
+    try:
+        profile = {
+            'email': jlm_profile['email'],
+            'first_name': jlm_profile.get('first_name') or '',
+            'last_name': jlm_profile.get('last_name') or '',
+            'city': location.get('city') or '',
+            'country_code': location.get('country_code') or ''
+        }
 
-    return profile
-
+        return profile
+    except KeyError:
+        raise ValueError('The profile was not of the correct format')
 
 def update_profile(user, profile):
     changed = False
